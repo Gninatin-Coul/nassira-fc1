@@ -42,8 +42,12 @@ class PlayerController extends Controller
             'birth_date' => 'required|date',
             'position' => 'required|string|max:255',
             'bio' => 'nullable|string',
-            'photo_url' => 'nullable|url',
+            'photo' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo_url'] = $request->file('photo')->store('players', 'public');
+        }
 
         \App\Models\Player::create($validated);
 
@@ -74,8 +78,15 @@ class PlayerController extends Controller
             'birth_date' => 'required|date',
             'position' => 'required|string|max:255',
             'bio' => 'nullable|string',
-            'photo_url' => 'nullable|url',
+            'photo' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            // Delete old photo if necessary (optional improvement)
+            $validated['photo_url'] = $request->file('photo')->store('players', 'public');
+        } elseif ($request->has('photo_url') === false && $request->has('photo') === false) {
+             // Handle if we need to keep existing
+        }
 
         $player->update($validated);
 

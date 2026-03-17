@@ -35,9 +35,13 @@ class ArticleController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image_url' => 'nullable|url',
+            'image' => 'nullable|image|max:2048',
             'published_at' => 'nullable|date',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image_url'] = $request->file('image')->store('articles', 'public');
+        }
 
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
         
@@ -74,9 +78,13 @@ class ArticleController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image_url' => 'nullable|url',
+            'image' => 'nullable|image|max:2048',
             'published_at' => 'nullable|date',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image_url'] = $request->file('image')->store('articles', 'public');
+        }
 
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
         

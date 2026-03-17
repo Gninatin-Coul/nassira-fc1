@@ -40,10 +40,14 @@ class StaffController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'type' => 'required|in:dirigeant,personnel',
-            'photo_url' => 'nullable|url|max:255',
+            'photo' => 'nullable|image|max:2048',
             'bio' => 'nullable|string',
             'order' => 'nullable|integer',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo_url'] = $request->file('photo')->store('staff', 'public');
+        }
 
         Staff::create($validated);
 
@@ -67,10 +71,14 @@ class StaffController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'type' => 'required|in:dirigeant,personnel',
-            'photo_url' => 'nullable|url|max:255',
+            'photo' => 'nullable|image|max:2048',
             'bio' => 'nullable|string',
             'order' => 'nullable|integer',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo_url'] = $request->file('photo')->store('staff', 'public');
+        }
 
         $staff->update($validated);
 

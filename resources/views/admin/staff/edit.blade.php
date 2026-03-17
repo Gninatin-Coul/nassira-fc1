@@ -11,7 +11,7 @@
         </div>
 
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-            <form action="{{ route('admin.staff.update', $staff) }}" method="POST" class="p-8 space-y-6">
+            <form action="{{ route('admin.staff.update', $staff) }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
                 @csrf
                 @method('PUT')
                 
@@ -44,11 +44,12 @@
                     </div>
                 </div>
 
-                <div class="space-y-1">
-                    <label class="text-sm font-bold text-gray-700">URL de la photo (Optionnel)</label>
-                    <input type="url" name="photo_url" value="{{ old('photo_url', $staff->photo_url) }}"
-                        class="w-full px-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:ring-4 focus:ring-foot-violet/5 focus:border-foot-violet transition duration-200">
-                </div>
+                <x-image-upload 
+                    name="photo" 
+                    label="Photo (Optionnel)" 
+                    :value="old('photo', $staff->photo_url ? asset('storage/' . $staff->photo_url) : '')" 
+                    :maxSizeMB="2" 
+                />
 
                 <div class="space-y-1">
                     <label class="text-sm font-bold text-gray-700">Courte Bio</label>

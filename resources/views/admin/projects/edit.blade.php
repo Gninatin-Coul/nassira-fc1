@@ -3,7 +3,7 @@
     <x-slot:header>Éditer : {{ $project->name }}</x-slot>
 
     <div class="max-w-4xl bg-white shadow-sm rounded-xl overflow-hidden border border-gray-100 p-8">
-        <form action="{{ route('admin.projects.update', $project) }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.projects.update', $project) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
             
@@ -32,17 +32,12 @@
                 </div>
             </div>
 
-            <div>
-                <label for="image_url" class="block text-sm font-bold text-gray-700 mb-1">URL de l'image (optionnel)</label>
-                <input type="url" name="image_url" id="image_url" value="{{ old('image_url', $project->image_url) }}"
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-foot-violet focus:ring-foot-violet sm:text-sm">
-                @error('image_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                @if($project->image_url)
-                    <div class="mt-2">
-                        <img src="{{ $project->image_url }}" alt="Preview" class="h-20 w-32 object-cover rounded shadow-sm">
-                    </div>
-                @endif
-            </div>
+            <x-image-upload 
+                name="image" 
+                label="Image (optionnel)" 
+                :value="old('image', $project->image_url ? asset('storage/' . $project->image_url) : '')" 
+                :maxSizeMB="2" 
+            />
 
             <div>
                 <label for="description" class="block text-sm font-bold text-gray-700 mb-1">Description détaillée</label>

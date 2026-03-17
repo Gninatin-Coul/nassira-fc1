@@ -37,8 +37,12 @@ class ProjectController extends Controller
             'description' => 'required|string',
             'status' => 'required|string|in:en cours,terminé',
             'goal' => 'nullable|string|max:255',
-            'image_url' => 'nullable|url',
+            'image' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image_url'] = $request->file('image')->store('projects', 'public');
+        }
 
         \App\Models\Project::create($validated);
 
@@ -75,8 +79,12 @@ class ProjectController extends Controller
             'description' => 'required|string',
             'status' => 'required|string|in:en cours,terminé',
             'goal' => 'nullable|string|max:255',
-            'image_url' => 'nullable|url',
+            'image' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image_url'] = $request->file('image')->store('projects', 'public');
+        }
 
         $project->update($validated);
 

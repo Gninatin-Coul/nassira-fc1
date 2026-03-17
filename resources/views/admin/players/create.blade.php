@@ -3,7 +3,7 @@
     <x-slot:header>Ajouter un Joueur</x-slot>
 
     <div class="max-w-4xl bg-white shadow-sm rounded-xl overflow-hidden border border-gray-100 p-8">
-        <form action="{{ route('admin.players.store') }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.players.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -48,13 +48,12 @@
                 </div>
             </div>
 
-            <div>
-                <label for="photo_url" class="block text-sm font-bold text-gray-700 mb-1">URL de la photo (optionnel)</label>
-                <input type="url" name="photo_url" id="photo_url" value="{{ old('photo_url') }}"
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-foot-violet focus:ring-foot-violet sm:text-sm"
-                    placeholder="https://example.com/avatar.jpg">
-                @error('photo_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-            </div>
+            <x-image-upload 
+                name="photo" 
+                label="Photo (optionnel)" 
+                :value="old('photo')" 
+                :maxSizeMB="2" 
+            />
 
             <div>
                 <label for="bio" class="block text-sm font-bold text-gray-700 mb-1">Biographie / Notes</label>

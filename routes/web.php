@@ -10,6 +10,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 // --- AUTHENTIFICATION ---
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -58,14 +60,22 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ));
     })->name('dashboard');
 
-    Route::resource('players', PlayerController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('games', GameController::class);
-    Route::resource('articles', ArticleController::class);
-    Route::resource('projects', ProjectController::class);
-    Route::resource('staff', StaffController::class);
-    Route::resource('registrations', RegistrationController::class)->only(['index', 'update', 'destroy']);
-    Route::get('/messages', [ContactController::class, 'index'])->name('messages.index');
-    Route::patch('/messages/{id}/read', [ContactController::class, 'read'])->name('messages.read');
-    // Les autres ressources admin viendront ici...
+    // Wrap content management routes with 'manage content' permission
+    Route::middleware(['can:manage content'])->group(function () {
+        Route::resource('players', PlayerController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('games', GameController::class);
+        Route::resource('articles', ArticleController::class);
+        Route::resource('projects', ProjectController::class);
+        Route::resource('staff', StaffController::class);
+        Route::resource('registrations', RegistrationController::class)->only(['index', 'update', 'destroy']);
+        Route::get('/messages', [ContactController::class, 'index'])->name('messages.index');
+        Route::patch('/messages/{id}/read', [ContactController::class, 'read'])->name('messages.read');
+    });
+    
+    // Protect users & roles management with a permission
+    Route::middleware(['can:manage users'])->group(function () {
+        Route::resource('users', UserController::class);
+        Route::resource('roles', RoleController::class)->except(['show']);
+    });
 });

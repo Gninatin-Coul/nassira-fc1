@@ -3,7 +3,7 @@
     <x-slot:header>Éditer : {{ $player->first_name }} {{ $player->last_name }}</x-slot>
 
     <div class="max-w-4xl bg-white shadow-sm rounded-xl overflow-hidden border border-gray-100 p-8">
-        <form action="{{ route('admin.players.update', $player) }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.players.update', $player) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
             
@@ -47,17 +47,12 @@
                 </div>
             </div>
 
-            <div>
-                <label for="photo_url" class="block text-sm font-bold text-gray-700 mb-1">URL de la photo (optionnel)</label>
-                <div class="flex items-center space-x-4">
-                    <div class="w-16 h-16 rounded-full bg-gray-100 overflow-hidden border">
-                        <img src="{{ $player->photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode($player->first_name.' '.$player->last_name).'&color=4C1D95&background=F3E8FF' }}" alt="" class="w-full h-full object-cover">
-                    </div>
-                    <input type="url" name="photo_url" id="photo_url" value="{{ old('photo_url', $player->photo_url) }}"
-                        class="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-foot-violet focus:ring-foot-violet sm:text-sm">
-                </div>
-                @error('photo_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-            </div>
+            <x-image-upload 
+                name="photo" 
+                label="Photo (optionnel)" 
+                :value="old('photo', $player->photo_url ? asset('storage/' . $player->photo_url) : '')" 
+                :maxSizeMB="2" 
+            />
 
             <div>
                 <label for="bio" class="block text-sm font-bold text-gray-700 mb-1">Biographie / Notes</label>
