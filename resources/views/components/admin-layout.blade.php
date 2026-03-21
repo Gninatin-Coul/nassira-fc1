@@ -13,7 +13,7 @@
     <!-- Sidebar -->
     <aside class="w-64 bg-foot-violet text-white flex flex-col hidden md:flex shrink-0">
         <div class="h-20 flex items-center px-6 border-b border-white/10">
-            <span class="text-2xl font-extrabold text-foot-yellow tracking-tight">NASSIRA <span class="text-white">Admin</span></span>
+            <img src="{{ asset('media/logo.jpeg') }}" alt="Nassira Académie Club" class="h-12 w-auto">
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 text-foot-yellow font-bold' : 'hover:bg-white/5 text-gray-300 hover:text-white' }} rounded-lg transition">
